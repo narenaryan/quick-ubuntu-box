@@ -49,6 +49,10 @@ RUN apt-get update && apt-get install -y \
     make \
     gcc \
     g++ \
+    autoconf \
+    automake \
+    libtool \
+    pkg-config \
     # Additional useful tools
     jq \
     less \
@@ -61,6 +65,19 @@ RUN apt-get update && apt-get install -y \
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/*
+
+# Install Go (supports both amd64 and arm64)
+RUN ARCH=$(dpkg --print-architecture) && \
+    if [ "$ARCH" = "amd64" ]; then \
+        GO_ARCH="amd64"; \
+    elif [ "$ARCH" = "arm64" ]; then \
+        GO_ARCH="arm64"; \
+    else \
+        echo "Unsupported architecture: $ARCH" && exit 1; \
+    fi && \
+    curl -fsSL https://golang.org/dl/go1.21.4.linux-${GO_ARCH}.tar.gz -o go.tar.gz && \
+    tar -C /usr/local -xzf go.tar.gz && \
+    rm go.tar.gz
 
 # Security updates to address medium severity vulnerabilities
 RUN apt-get update && apt-get upgrade -y \
@@ -98,7 +115,9 @@ RUN echo 'export PS1="\u@\h:\w\$ "' >> ~/.bashrc && \
     echo 'alias la="ls -la"' >> ~/.bashrc && \
     echo 'alias l="ls -l"' >> ~/.bashrc && \
     echo 'alias ..="cd .."' >> ~/.bashrc && \
-    echo 'alias ...="cd ../.."' >> ~/.bashrc
+    echo 'alias ...="cd ../.."' >> ~/.bashrc && \
+    echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> ~/.bashrc && \
+    echo 'export GOPATH=$HOME/go' >> ~/.bashrc
 
 # Keep container running
 CMD ["/bin/bash"]
