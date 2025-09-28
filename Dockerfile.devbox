@@ -44,8 +44,6 @@ RUN apt-get update && apt-get install -y \
     # Programming languages and tools
     python3 \
     python3-pip \
-    nodejs \
-    npm \
     # Build tools
     build-essential \
     make \
@@ -57,6 +55,23 @@ RUN apt-get update && apt-get install -y \
     man-db \
     bash-completion \
     ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js LTS (v20) from NodeSource repository to fix CVE-2023-44487
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
+# Security updates to address medium severity vulnerabilities
+RUN apt-get update && apt-get upgrade -y \
+    # Update critical packages with known vulnerabilities
+    libgssapi-krb5-2 \
+    libk5crypto3 \
+    libkrb5-3 \
+    libkrb5support0 \
+    libgnutls30 \
+    libtasn1-6 \
+    libc-bin \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user
