@@ -118,6 +118,13 @@ RUN ARCH=$(dpkg --print-architecture) && \
     install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
     rm kubectl
 
+# Install Helm
+RUN curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor | tee /usr/share/keyrings/helm.gpg > /dev/null && \
+    echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | tee /etc/apt/sources.list.d/helm-stable-debian.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends helm && \
+    rm -rf /var/lib/apt/lists/*
+
 # Create a non-root user
 RUN useradd -m -s /bin/bash -u 1000 developer && \
     echo "developer:developer" | chpasswd && \

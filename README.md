@@ -44,7 +44,7 @@ This will build and start both containers, test connectivity, and display connec
 * git, vim, nano - Version control and editors
 * python3, nodejs, go, rust - Programming languages
 * vim with LSP support - gopls (Go) and rust-analyzer (Rust) with autocompletion
-* AWS CLI, kubectl - Cloud and Kubernetes tools
+* AWS CLI, kubectl, helm - Cloud and Kubernetes tools
 * htop, tree - System monitoring and file browsing
 * zip, unzip, jq - Archive and JSON processing
 
