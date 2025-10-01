@@ -1,10 +1,12 @@
-# Quick Ubuntu Box
+# Quick Dev Box
 
 A Docker-based development environment for network security training and testing.
 
 ## Overview
 
-This project provides two Ubuntu development containers with pre-installed network tools for security research and training. The containers are connected via a custom Docker network and include comprehensive toolsets for network analysis, penetration testing practice, and development.
+This project provides two Debian-based development containers with pre-installed network tools for security research and training. The containers are connected via a custom Docker network and include comprehensive toolsets for network analysis, penetration testing practice, and development.
+
+**Base Image**: Debian Bookworm Slim (optimized for size while maintaining full functionality as Ubuntu)
 
 ## Requirements
 
@@ -40,7 +42,9 @@ This will build and start both containers, test connectivity, and display connec
 
 ### Development Tools
 * git, vim, nano - Version control and editors
-* python3, nodejs - Programming languages
+* python3, nodejs, go, rust - Programming languages
+* vim with LSP support - gopls (Go) and rust-analyzer (Rust) with autocompletion
+* AWS CLI, kubectl - Cloud and Kubernetes tools
 * htop, tree - System monitoring and file browsing
 * zip, unzip, jq - Archive and JSON processing
 

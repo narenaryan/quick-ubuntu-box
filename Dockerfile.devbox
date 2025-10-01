@@ -1,10 +1,10 @@
-FROM ubuntu:22.04
+FROM debian:bookworm-slim
 
 # Avoid prompts from apt
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Update package lists and install essential tools
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     # Network tools
     nmap \
     netcat-openbsd \
@@ -63,7 +63,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install Node.js LTS (v20) from NodeSource repository to fix CVE-2023-44487
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
-    apt-get install -y nodejs && \
+    apt-get install -y --no-install-recommends nodejs && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Go (supports both amd64 and arm64)
@@ -80,7 +80,7 @@ RUN ARCH=$(dpkg --print-architecture) && \
     rm go.tar.gz
 
 # Security updates to address medium severity vulnerabilities
-RUN apt-get update && apt-get upgrade -y \
+RUN apt-get update && apt-get upgrade -y --no-install-recommends \
     # Update critical packages with known vulnerabilities
     libgssapi-krb5-2 \
     libk5crypto3 \
