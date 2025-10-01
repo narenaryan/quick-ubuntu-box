@@ -136,6 +136,9 @@ RUN mkdir -p /shared && chown developer:developer /shared
 USER developer
 WORKDIR /home/developer
 
+# Install Rust and Cargo for developer user
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
 # Set up a nice bash prompt and aliases
 RUN echo 'export PS1="\u@\h:\w\$ "' >> ~/.bashrc && \
     echo 'alias ll="ls -la"' >> ~/.bashrc && \
@@ -144,7 +147,7 @@ RUN echo 'export PS1="\u@\h:\w\$ "' >> ~/.bashrc && \
     echo 'alias ..="cd .."' >> ~/.bashrc && \
     echo 'alias ...="cd ../.."' >> ~/.bashrc && \
     echo 'alias python="python3"' >> ~/.bashrc && \
-    echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> ~/.bashrc && \
+    echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$HOME/.cargo/bin' >> ~/.bashrc && \
     echo 'export GOPATH=$HOME/go' >> ~/.bashrc
 
 # Keep container running
