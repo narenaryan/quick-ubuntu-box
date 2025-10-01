@@ -48,6 +48,38 @@ This will build and start both containers, test connectivity, and display connec
 * htop, tree - System monitoring and file browsing
 * zip, unzip, jq - Archive and JSON processing
 
+### AI Tools
+* **Claude Code** - Anthropic's agentic coding assistant
+* **OpenAI Codex CLI** - OpenAI's coding agent with GPT models
+* **Google Gemini CLI** - Google's Gemini AI agent for terminal
+
+## AI Tools Setup
+
+All AI CLI tools require authentication on first use:
+
+### Claude Code
+```sh
+# Run Claude Code and follow OAuth authentication
+claude
+```
+Requires: Anthropic account (authenticate via browser on first run)
+
+### OpenAI Codex CLI
+```sh
+# Run Codex and authenticate
+codex
+```
+Requires: ChatGPT account (Plus/Pro/Team/Enterprise recommended for best experience)
+
+### Google Gemini CLI
+```sh
+# Run Gemini CLI
+gemini
+```
+Requires: Google account
+- **Free tier**: 60 requests/min, 1,000 requests/day
+- **Alternative**: Use API key from [Google AI Studio](https://aistudio.google.com/)
+
 ## Usage Commands
 
 ### Container Management

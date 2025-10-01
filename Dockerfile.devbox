@@ -125,6 +125,9 @@ RUN curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gp
     apt-get install -y --no-install-recommends helm && \
     rm -rf /var/lib/apt/lists/*
 
+# Install AI CLI tools globally via npm (as root)
+RUN npm install -g @anthropic-ai/claude-code @openai/codex @google/gemini-cli
+
 # Create a non-root user
 RUN useradd -m -s /bin/bash -u 1000 developer && \
     echo "developer:developer" | chpasswd && \
