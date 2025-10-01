@@ -139,6 +139,64 @@ WORKDIR /home/developer
 # Install Rust and Cargo for developer user
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
+# Install LSP servers and components for Go and Rust
+RUN . "$HOME/.cargo/env" && \
+    # Install rust-analyzer for Rust LSP
+    rustup component add rust-analyzer && \
+    # Install gopls for Go LSP
+    /usr/local/go/bin/go install golang.org/x/tools/gopls@latest
+
+# Set up vim with vim-plug and LSP configuration
+RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim && \
+    mkdir -p ~/.vim/pack/plugins/start
+
+# Create .vimrc with LSP configuration
+RUN printf '%s\n' \
+    "call plug#begin('~/.vim/plugged')" \
+    "Plug 'prabirshrestha/vim-lsp'" \
+    "Plug 'prabirshrestha/asyncomplete.vim'" \
+    "Plug 'prabirshrestha/asyncomplete-lsp.vim'" \
+    "Plug 'mattn/vim-lsp-settings'" \
+    "call plug#end()" \
+    "" \
+    '" LSP settings' \
+    "let g:lsp_diagnostics_enabled = 1" \
+    "let g:lsp_diagnostics_echo_cursor = 1" \
+    "let g:asyncomplete_auto_popup = 1" \
+    "let g:asyncomplete_auto_completeopt = 0" \
+    "set completeopt=menuone,noinsert,noselect,preview" \
+    "" \
+    '" Go LSP configuration' \
+    "if executable('gopls')" \
+    "    au User lsp_setup call lsp#register_server({" \
+    "        \\ 'name': 'gopls'," \
+    "        \\ 'cmd': {server_info->['gopls']}," \
+    "        \\ 'allowlist': ['go']," \
+    "        \\ })" \
+    "endif" \
+    "" \
+    '" Rust LSP configuration' \
+    "if executable('rust-analyzer')" \
+    "    au User lsp_setup call lsp#register_server({" \
+    "        \\ 'name': 'rust-analyzer'," \
+    "        \\ 'cmd': {server_info->['rust-analyzer']}," \
+    "        \\ 'allowlist': ['rust']," \
+    "        \\ })" \
+    "endif" \
+    "" \
+    '" Key mappings' \
+    "nmap <silent> gd <plug>(lsp-definition)" \
+    "nmap <silent> gr <plug>(lsp-references)" \
+    "nmap <silent> K <plug>(lsp-hover)" \
+    "nmap <silent> <leader>rn <plug>(lsp-rename)" \
+    "syntax on" \
+    "filetype plugin indent on" \
+    > ~/.vimrc
+
+# Install vim plugins
+RUN vim +PlugInstall +qall
+
 # Set up a nice bash prompt and aliases
 RUN echo 'export PS1="\u@\h:\w\$ "' >> ~/.bashrc && \
     echo 'alias ll="ls -la"' >> ~/.bashrc && \
